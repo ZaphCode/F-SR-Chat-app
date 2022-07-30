@@ -5,7 +5,10 @@
     <title>Document</title>
 </head>
 <body>
-    {% include 'components/navbar.html' %}
-    <h1>Hello world</h1>
+    {% if user %}
+        <p>Hi {{user.username}}</p>     
+    {% else %}
+        <p>You are not logged in</p> 
+    {% endif %} 
 </body>
 </html>

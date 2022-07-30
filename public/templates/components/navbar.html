@@ -1,0 +1,18 @@
+<nav class="bg-gray-700">
+    <div class="h-20 items-center justify-between container mx-auto flex">
+        <div>
+            <h3><a href="/">Zaph Chat app</a></h3>
+        </div>
+        {% if user %}
+            <div class="flex gap-x-3">
+                <a href="/protected">protected</a>
+                <span class="cursor-pointer" id="logout-btn">logout</span>
+            </div>
+        {% else %}
+        <div>
+            <a href="/login">login</a>
+            <a href="/register">register</a>
+        </div>
+        {% endif %}
+    </div>
+</nav>
