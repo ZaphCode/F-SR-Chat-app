@@ -10,7 +10,7 @@ class GenericService:
             self.format_model = formater 
 
     @service_error_handler
-    def get_all(self, limit: int):
+    def get_all(self, limit: int = 10):
         models_found = [self.format_model(self.Model.get(pk)) for pk in self.Model.all_pks()]
         return (models_found[:limit], None)
     

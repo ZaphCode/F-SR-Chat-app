@@ -1,17 +1,28 @@
-<nav class="bg-gray-700">
+<nav
+    class="bg-gray-100 px-12 shadow-lg shadow-neutral-200 border-b-2 border-gray-500 sm:border-blue-300 md:border-green-300 lg:border-red-300 xl:border-red-900">
     <div class="h-20 items-center justify-between container mx-auto flex">
-        <div>
-            <h3><a href="/">Zaph Chat app</a></h3>
+        <div class="flex gap-2 justify-center items-center">
+            <a href="/" class="flex flex-nowrap flex-row justify-center gap-2">
+                <img class="h-8 pb-1" src={{ url_for('static', path='/svg/app_logo.svg' ) }} alt="App logo">
+                <h3 class="app-title">F-RS</h3>
+            </a>
+            <p class="text-gray-500 italic">Chat app</p>
         </div>
         {% if user %}
-            <div class="flex gap-x-3">
-                <a href="/protected">protected</a>
-                <span class="cursor-pointer" id="logout-btn">logout</span>
-            </div>
+        <div class="flex gap-x-3">
+            <a href="/profile">
+                {% if user.image_url %}
+                <img class="w-12 h-12 rounded-full" src={{ user.image_url }} alt="user profile">
+                {% else %}
+                <img class="w-12 h-12 rounded-full" src={{ url_for('static', path='/default_profile.jpg' ) }}
+                    alt="user profile">
+                {% endif %}
+            </a>
+        </div>
         {% else %}
         <div>
-            <a href="/login">login</a>
-            <a href="/register">register</a>
+            <a href="/signin">SignIn</a>
+            <a href="/signup">SignUp</a>
         </div>
         {% endif %}
     </div>

@@ -1,25 +1,25 @@
-from fastapi import FastAPI, Request, status
-from fastapi.responses import RedirectResponse
+from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from lib.exceptions import ServerErrorPageException, RequiresLoginException
-from routers.views_router import j2, router as views_router
+from lib.event_handlers import shutdown_handler, startup_handler
+from lib.exceptions import ServerErrorPageException, RequiresSignInException
+from lib.exception_handlers import requeries_login_exc_handler, server_error_page_exc_handler, not_found_exc_handler
+from routers.views_router import router as views_router
+from routers.ws_router import router as ws_router
+from routers.chat_router import router as chat_router
+from routers.auth_router import router as auth_router
 from starlette.middleware.sessions import SessionMiddleware
-from redis_om import Migrator
-import cloudinary
+from fastapi.middleware.cors import CORSMiddleware
 import config
 
-cloudinary.config( 
-  cloud_name = config.cloudinary_db_name, 
-  api_key = config.cloudinary_api_key, 
-  api_secret = config.cloudinary_secret_key 
-)
 
+#* Initialization
 app = FastAPI(
     title="Chat APP - Zaph",
     description="Simple chat app with FastAPI, Redis Stack, Cloudinary and Tailwind",
     version="1.1",
 )
 
+#* Middlewares
 app.add_middleware(
     SessionMiddleware, 
     secret_key = config.session_secret, 
@@ -27,32 +27,33 @@ app.add_middleware(
     max_age = 259200 # 3 days
 )
 
+origins = [
+    "http://localhost",
+    "http://localhost:8500",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+#* Settings
 app.mount('/static', StaticFiles(directory='public/static'), 'static')
 
 #* Exception Handlers
-@app.exception_handler(RequiresLoginException)
-async def exception_handler(request: Request, exc: RequiresLoginException):
-    return RedirectResponse('/login', status.HTTP_307_TEMPORARY_REDIRECT)
+app.add_exception_handler(RequiresSignInException, requeries_login_exc_handler)
+app.add_exception_handler(ServerErrorPageException, server_error_page_exc_handler)
+app.add_exception_handler(404, not_found_exc_handler)
 
-@app.exception_handler(ServerErrorPageException)
-async def exception_handler(request: Request, exc: ServerErrorPageException):
-    return j2.TemplateResponse(
-        'error.html', 
-        {
-            "request": request, 
-            "error_type": exc.error_type,
-            "error_msg": exc.error_msg,
-            "error_code": exc.error_code
-        }
-    )
+#* Events handlers
+app.add_event_handler("startup", startup_handler)
+app.add_event_handler("shutdown", shutdown_handler)
 
-@app.exception_handler(404)
-async def exception_handler(request: Request, exc):
-    return j2.TemplateResponse('not_found.html', {"request": request})
-
-@app.on_event('startup')
-async def startup():
-    Migrator().run()
-    print("Server start!")
-
-app.include_router(views_router)
+#* Routers
+app.include_router(router = views_router)
+app.include_router(router = ws_router)
+app.include_router(router = auth_router)
+app.include_router(router = chat_router)

@@ -1,77 +1,78 @@
-from typing import Tuple
-from fastapi import APIRouter, BackgroundTasks, Request, Depends, status
+from fastapi import APIRouter, Path, Request, Depends, status
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from lib.exceptions import ServerErrorPageException
-from lib.get_user import get_user_optional, get_user_required
-from lib.upload_bg_task import upload_profile_img
-from database.user_model import User
+from services.chatroom_service import ChatroomService
+from services.message_service import MessageService
 from services.user_service import UserService
-from schemas.signup_schema import SignUpSch
-from schemas.signin_schema import SignInSch
+from lib.user_dependency import get_user_optional, get_user_required
 
+#* Initializations
 router = APIRouter(tags=["Views"])
 j2 = Jinja2Templates(directory='public/templates')
-user_service = UserService(model=User)
+user_service = UserService()
+chatroom_service = ChatroomService()
+message_service = MessageService()
 
 @router.get('/', response_class=HTMLResponse)
 async def index_page(request: Request, user: dict = Depends(get_user_optional)):
     return j2.TemplateResponse('index.html', {"request": request, "user": user})
 
-@router.get('/protected', response_class=HTMLResponse)
+@router.get('/profile', response_class=HTMLResponse)
 async def index_page(request: Request, user: dict = Depends(get_user_required)):
-    return j2.TemplateResponse('protected.html', {"request": request, "user": user})
+    return j2.TemplateResponse('profile.html', {"request": request, "user": user})
 
-@router.get('/login', response_class=HTMLResponse)
-async def login_page(request: Request, user: dict = Depends(get_user_optional)):
+@router.get('/chatroom/{chatroom_pk}', response_class=HTMLResponse)
+async def chat_page(
+    request: Request,
+    chatroom_pk: str = Path(..., description="Chat primary key"),
+    user: dict = Depends(get_user_required)
+):
+    chatroom, service_error = chatroom_service.get_by_pk(chatroom_pk)
+    if service_error or not chatroom:
+        return RedirectResponse('/', status.HTTP_307_TEMPORARY_REDIRECT)
+    if not (chatroom["user_pk_1"] == user["pk"] or chatroom["user_pk_2"] == user["pk"]):
+        return RedirectResponse('/', status.HTTP_307_TEMPORARY_REDIRECT)
+    messages, service_error_2 = message_service.get_messages_of_chatroom(chatroom["pk"], user["pk"])
+    if service_error_2 or not chatroom:
+        return RedirectResponse('/', status.HTTP_307_TEMPORARY_REDIRECT)
+    print(messages)
+    return j2.TemplateResponse(
+        'chatroom.html', {
+            "request": request, "user": user, 
+            "chatroom_pk": chatroom["pk"], "messages": messages
+        }
+    )
+
+@router.get('/signin', response_class=HTMLResponse, tags=["Auth"])
+async def signin_page(request: Request, user: dict = Depends(get_user_optional)):
     if user:
         return RedirectResponse('/', status.HTTP_307_TEMPORARY_REDIRECT)
-    return j2.TemplateResponse('login.html', {"request": request, "user": user})
+    return j2.TemplateResponse('signin.html', {"request": request, "user": user})
 
-@router.get('/register', response_class=HTMLResponse)
-async def register_page(request: Request, user: dict = Depends(get_user_optional)):
+@router.get('/signup', response_class=HTMLResponse, tags=["Auth"])
+async def signup_page(request: Request, user: dict = Depends(get_user_optional)):
     if user:
         return RedirectResponse('/', status.HTTP_307_TEMPORARY_REDIRECT)
-    return j2.TemplateResponse('register.html', {"request": request, "user": user})
+    return j2.TemplateResponse('signup.html', {"request": request, "user": user})
 
-@router.post('/login', response_class=RedirectResponse)
-async def login(
-    request: Request, 
-    form_data: Tuple[SignInSch, dict] = Depends(SignInSch.as_form), 
-    user: dict = Depends(get_user_optional)
-):
-    if user:
-        raise ServerErrorPageException("Auth", "You are already authenticated")
-    credentials, form_errors = form_data
-    if form_errors:
-        return j2.TemplateResponse('login.html', {"request": request, "form_errors": form_errors, "user": user})
-    created_user, service_error = user_service.login(credentials.email, credentials.password)
+@router.get('/users', response_class=HTMLResponse)
+async def users_page(request: Request, user: dict = Depends(get_user_required)):
+    users, service_error = user_service.get_all()
     if service_error:
-        return j2.TemplateResponse('login.html', {"request": request, "service_error": service_error, "user": user})
-    request.session["user_pk"] = created_user["pk"]
-    return RedirectResponse('/', status.HTTP_303_SEE_OTHER)
+        raise ServerErrorPageException("DB_ERR", "Error quering the users")
+    print(users)
+    return j2.TemplateResponse('users.html', {"request": request, "user": user, "users": users})
 
-@router.post('/register', response_class=RedirectResponse)
-async def register(
-    request: Request, 
-    bg_tasks: BackgroundTasks, 
-    form_data: Tuple[SignUpSch, dict] = Depends(SignUpSch.as_form), 
-    user: dict = Depends(get_user_optional)
-):
-    if user:
-        raise ServerErrorPageException("Auth", "You are already authenticated")
-    data, form_errors = form_data
-    if form_errors:
-        return j2.TemplateResponse('register.html', {"request": request, "form_errors": form_errors, "user": user})
-    new_user, service_error = user_service.register(data)
-    if service_error:
-        return j2.TemplateResponse('register.html', {"request": request, "server_error": service_error, "user": user})
-    if data.z_file:
-        bg_tasks.add_task(upload_profile_img, new_user.get('pk'), data.z_file)
-    return RedirectResponse('/login', status.HTTP_303_SEE_OTHER)
 
-@router.delete('/logout')
-async def logout(request: Request):
-    request.session.pop("user_pk", None)
-    return "Logout success"
+#* Testing
+@router.get('/testing/{id}', response_class=HTMLResponse)
+async def testing_page(id: str, request: Request, user: dict = Depends(get_user_optional)):
+    if id == "35":
+        raise ServerErrorPageException("HATE_ERROR", "No me gusta para nada ese numero deberias cambiarlo o te agarro a putasos")
+    return j2.TemplateResponse('test.html', {"request": request, "user": user, "id": id})
+
+
+
+
 

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'components/head.html' %}
+    <title>Document</title>
+</head>
+<body>
+    {% include 'components/navbar.html' %}
+    <div>
+        {% for user_to_chat in users %}
+            {% if user.pk != user_to_chat.pk %}
+              <h1>{{ user_to_chat.username }}</h1>  
+            {% endif %}
+        {% endfor %}
+    </div>
+</body>
+</html>

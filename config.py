@@ -4,6 +4,7 @@ from os import getenv
 load_dotenv()
 
 session_secret = str(getenv('SESSION_SECRET', "super_secret"))
+encryption_secret = str(getenv('ENCRYPTION_SECRET', "encryption_super_secret"))
 redis_db_host = str(getenv('REDIS_DB_HOST', "localhost"))
 redis_db_port = int(getenv('REDIS_DB_PORT', 6300))
 redis_db_password = str(getenv('REDIS_DB_PASSWORD', None))

@@ -2,10 +2,14 @@
 <html lang="en">
 <head>
     {% include 'components/head.html' %}
-    <title>Document</title>
+    <title>Home</title>
 </head>
 <body>
     {% include 'components/navbar.html' %}
-    <h1>Hello world</h1>
+    <main class="container px-10 mx-auto pt-12 mb-auto">
+        <img class="mb-5 mx-auto w-3/6 sm:w-64" src={{ url_for('static', path='/svg/welcome.svg') }} alt="welcome">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis qui aspernatur assumenda dolore sint similique consequatur. Temporibus veritatis excepturi itaque, quod dolores sapiente. Odio hic blanditiis ex architecto expedita minus!</p>
+    </main>
+    {% include 'components/footer.html' %}
 </body>
 </html>

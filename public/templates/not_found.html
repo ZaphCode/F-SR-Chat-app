@@ -2,10 +2,13 @@
 <html lang="en">
 <head>
     {% include 'components/head.html' %}
-    <title>Document</title>
+    <title>Not found</title>
 </head>
 <body>
-    <h1>404</h1>
-    <h2>Page not Found</h1>
+    <div class="mt-20 flex justify-center items-center flex-col">
+        <img class="w-3/5 max-w-sm" src="{{ url_for('static', path='/undraw_page_not_found_re_e9o6.svg') }}" alt="server-error">
+        <h2 class="mt-5 mb-2 text-2xl font-semibold text-center">Not Found Page</h2>
+        <a href="/" class="text-red-400 hover:text-red-500 text-center">Go home</a>
+    </div>
 </body>
 </html>

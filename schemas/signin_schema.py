@@ -17,5 +17,5 @@ class SignInSch(BaseModel):
         except ValidationError as verr:
             errors: dict = {}
             for error in verr.errors():
-                errors[error["loc"][0]] = error["msg"]
+                errors[error["loc"][0]] = str(error["msg"]).capitalize()
             return (None, errors)
