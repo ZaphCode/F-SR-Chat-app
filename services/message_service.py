@@ -9,12 +9,12 @@ from redis_om import NotFoundError
 class MessageService(GenericService):
     def __init__(self) -> None:
 
-        def message_formater(message: Message):
+        def message_formatter(message: Message):
             msg_dict = message.dict()
             msg_dict["message"] = decrypt_message(msg_dict["message"])
             return msg_dict
 
-        super().__init__(model=Message, formater=message_formater)
+        super().__init__(model=Message, formatter=message_formatter)
 
     def create_message(self, chatroom_pk, sender_pk, message):
         try:
@@ -34,11 +34,8 @@ class MessageService(GenericService):
     def get_messages_of_chatroom(self, chatroom_pk, user_pk):
         try:
             chatroom: Chatroom = Chatroom.get(chatroom_pk)
-            print(chatroom)
             if chatroom.user_pk_1 == user_pk or chatroom.user_pk_2 == user_pk:
-                print("aaaaa")
                 messages = self.Model.find(self.Model.chatroom_pk == chatroom.pk).sort_by("-created_at").all()
-                print(messages)
                 return ([self.format_model(message) for message in messages], None)
             else:
                 raise Exception("You don't belong in that conversation.")

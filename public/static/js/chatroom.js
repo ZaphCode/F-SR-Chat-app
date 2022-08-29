@@ -4,15 +4,16 @@ const textAreaMsg = document.getElementById("text-area-msg")
 const errorMsg = document.getElementById("error-msg")
 const form = document.getElementById("form-message")
 
-const {chatroom_pk, user_pk: auth_user_pk } = serverInfo.dataset
+const { chatroom_pk, user_pk: auth_user_pk, app_domain } = serverInfo.dataset
 
 let ws
 
 console.log(auth_user_pk)
 
 try {
-    ws = new WebSocket(`ws://localhost:8500/ws/chatroom/${chatroom_pk}`);
+    ws = new WebSocket(`ws://${app_domain}/ws/chatroom/${chatroom_pk}`);
 } catch (error) {
+    alert("Connection error")
     console.log(error)
 }
 
@@ -32,21 +33,23 @@ ws.onmessage = (event) => {
 
 form.addEventListener('submit', (event) => {
     event.preventDefault()
+
     message = textAreaMsg.value.trim()
+
     if (!message || message.length <= 0) {
         errorMsg.innerText = "Don't send empty messages"
         textAreaMsg.value = ""
         return
     }
-    ws.send(JSON.stringify({ message}))
-    errorMsg.innerText = ""
-    textAreaMsg.value = ""
+
+    try {
+        ws.send(JSON.stringify({ message }))
+        errorMsg.innerText = ""
+        textAreaMsg.value = ""
+    } catch (error) {
+        console.log(">>> Error sendig message");
+        console.log(error)
+    }
+
 })
 
-// Send message
-// document.getElementById('form').addEventListener("submit", (event) => {
-//     event.preventDefault()
-//     var input = document.getElementById("messageText")
-//     ws.send(JSON.stringify({ "sender": `${Date.now()}-ASD`, "message": input.value }))
-//     input.value = ''
-// })

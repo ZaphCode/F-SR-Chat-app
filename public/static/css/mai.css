@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500&family=Kalam:wght@300;400;700&family=Montserrat:wght@300;400;500;700&display=swap');
+
+body {
+    background-color: #f2f2f2;
+    height: 100vh;
+    font-family: 'Hind', sans-serif;
+    position: relative;
+    color: #4e4e4e;
+    /* font-family: 'Open Sans', sans-serif; */
+}
+
+.app-title {
+    font-family: 'Kalam', cursive;
+    font-weight: 600;
+    font-size: 22px;
+    color: rgb(0, 0, 0)
+}
+
+.page-title {
+    color: #545454;
+    font-size: 26px;
+    font-weight: 700;
+    font-family: 'Kalam', cursive;
+}
+
+
+
+.chatoroom-container {
+    height: 440px;
+}
+
+.title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+}
+
+.msg-container {
+    scrollbar-color: #6969dd #e0e0e0;
+    scrollbar-width: thin;
+}
+
+.app-logo {
+    -webkit-animation:spin 14s linear infinite;
+    -moz-animation:spin 14s linear infinite;
+    animation:spin 14s linear infinite;
+}
+
+@-moz-keyframes spin { 
+    100% { -moz-transform: rotate(360deg); } 
+}
+@-webkit-keyframes spin { 
+    100% { -webkit-transform: rotate(360deg); } 
+}
+@keyframes spin { 
+    100% { 
+        -webkit-transform: rotate(360deg); 
+        transform:rotate(360deg); 
+    } 
+}

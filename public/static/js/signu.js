@@ -2,11 +2,12 @@ const profileImgInput = document.getElementById("profile-img-input")
 const profileImgBtn = document.getElementById("profile-img-btn")
 
 const btn_without_file_content = `
-    <p class="page-title text-lg font-normal text-gray-900">Add photo</p>
-    <img class="h-7" src="/static/svg/add_photo.svg" alt="add_photo">
+    <p class="font-normal text-gray-500">Add photo</p>
+    <ion-icon name="image-outline" class="text-xl text-gray-500"></ion-icon>
 `
 const btn_with_file_content = `
-    <p class="page-title text-lg font-normal text-gray-900">File selected</p>
+    <p class="font-normal text-gray-500">File selected</p>
+    <ion-icon name="checkmark-circle-outline" class="text-xl text-gray-500"></ion-icon>
 `
 profileImgBtn.addEventListener('click', () => {
     profileImgInput.click()

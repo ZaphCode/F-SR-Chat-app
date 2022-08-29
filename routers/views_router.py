@@ -6,6 +6,7 @@ from services.chatroom_service import ChatroomService
 from services.message_service import MessageService
 from services.user_service import UserService
 from lib.user_dependency import get_user_optional, get_user_required
+import config
 
 #* Initializations
 router = APIRouter(tags=["Views"])
@@ -20,7 +21,10 @@ async def index_page(request: Request, user: dict = Depends(get_user_optional)):
 
 @router.get('/profile', response_class=HTMLResponse)
 async def index_page(request: Request, user: dict = Depends(get_user_required)):
-    return j2.TemplateResponse('profile.html', {"request": request, "user": user})
+    chatrooms, service_error = chatroom_service.get_chatrooms_of_user(user["pk"])
+    if service_error:
+        raise ServerErrorPageException("DB_ERROR", service_error)
+    return j2.TemplateResponse('profile.html', {"request": request, "user": user, "chatrooms": chatrooms})
 
 @router.get('/chatroom/{chatroom_pk}', response_class=HTMLResponse)
 async def chat_page(
@@ -36,10 +40,9 @@ async def chat_page(
     messages, service_error_2 = message_service.get_messages_of_chatroom(chatroom["pk"], user["pk"])
     if service_error_2 or not chatroom:
         return RedirectResponse('/', status.HTTP_307_TEMPORARY_REDIRECT)
-    print(messages)
     return j2.TemplateResponse(
         'chatroom.html', {
-            "request": request, "user": user, 
+            "request": request, "user": user, "app_domain": config.app_domain,
             "chatroom_pk": chatroom["pk"], "messages": messages
         }
     )
@@ -58,12 +61,10 @@ async def signup_page(request: Request, user: dict = Depends(get_user_optional))
 
 @router.get('/users', response_class=HTMLResponse)
 async def users_page(request: Request, user: dict = Depends(get_user_required)):
-    users, service_error = user_service.get_all()
+    users, service_error = user_service.get_all(limit=10)
     if service_error:
-        raise ServerErrorPageException("DB_ERR", "Error quering the users")
-    print(users)
+        raise ServerErrorPageException("DB_ERR", service_error)
     return j2.TemplateResponse('users.html', {"request": request, "user": user, "users": users})
-
 
 #* Testing
 @router.get('/testing/{id}', response_class=HTMLResponse)

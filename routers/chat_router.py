@@ -1,5 +1,6 @@
-from fastapi import APIRouter, Depends, Path
+from fastapi import APIRouter, Depends, HTTPException, Path
 from lib.user_dependency import get_user_required
+from fastapi.responses import JSONResponse
 from services.chatroom_service import ChatroomService
 from services.message_service import MessageService
 
@@ -13,11 +14,11 @@ async def get_or_create_chatroom(
     user_to_chat_pk: str = Path(..., description="User to chat")
 ):
     if user_to_chat_pk == user["pk"]:
-        return "You can create a chat with yourself"
+        raise HTTPException(400, "You can create a chat with yourself")
     chatroom, service_error = chatroom_service.create_or_get_chatroom(user["pk"], user_to_chat_pk)
     if service_error:
-        return service_error
-    return chatroom["pk"]
+        raise HTTPException(400, service_error)
+    return JSONResponse(status_code=200, content={"chatroom_pk": chatroom["pk"]})
 
     
 

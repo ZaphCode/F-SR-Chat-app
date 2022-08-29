@@ -3,42 +3,75 @@
 
 <head>
     {% include 'components/head.html' %}
-    <title>Document</title>
+    <title>Profile</title>
 </head>
+
 <body>
     {% include 'components/navbar.html' %}
     <main class="mb-auto container mx-auto ">
-        <div class="px-2 grid grid-cols-1 md:grid-cols-2">
+        <div class="px-2 grid grid-cols-1 mb-10 md:mb-0 gap-10 md:grid-cols-2 pt-14">
             <!-- Column 1 -->
-            <div class="py-8 flex flex-col items-center">
-                <div class="flex gap-2 items-center">
-                    <img class="w-12 pb-2" src={{ url_for('static', path='/svg/user_profile.svg') }} alt="Profile icon">
+            <div class="py-8 flex flex-col bg-gray-50 shadow-xl  shadow-gray-200 items-center">
+                <!-- <div class="flex gap-2 items-center">
+                    <img class="w-12 pb-2" src={{ url_for('static', path='/svg/user_profile.svg' ) }}
+                        alt="Profile icon">
                     <h3 class="page-title text-3xl text-gray-900">Profile</h3>
+                </div> -->
+                <div class="border-b-2 border-gray-300 py-3 w-2/4">
+                    <p>Name: {{user.username}}</p>
                 </div>
-                <div class="flex my-3 justify-start flex-col w-3/5 md:w-4/5 lg:w-3/5">
-                    <div class="p-3 bg-gray-200">
-                        <p class="overflow-clip"><strong>Username: </strong>{{user.username}}</p>
-                    </div>
-                    <div class="p-3 bg-gray-300">
-                        <p class="overflow-clip"><strong>Email: </strong>{{user.email}}</p>
-                    </div>
-                    <div class="p-3 bg-gray-200">
-                        <p class="overflow-clip"><strong>Age: </strong>{{user.age}}</p>
-                    </div>
-                    <div class="p-3 bg--300 bg-gray-300">
-                        <p class="overflow-clip"><strong>Join at: </strong>{{user.created_at}}</p>
-                    </div>
+                <div class="border-b-2 border-gray-300 py-3 w-2/4">
+                    <p>Email: {{user.email}}</p>
                 </div>
-                <span id="logout-btn" class="text-red-400 cursor-pointer">Logout</span>
+                <div class="border-b-2 border-gray-300 py-3 w-2/4">
+                    <p>Age: {{user.age}}</p>
+                </div>
+                <div class="border-b-2 border-gray-300 py-3 w-2/4">
+                    <p>Joined at: {{user.created_at}}</p>
+                </div>
+                <!-- <span id="logout-btn" class="text-gray-400 cursor-pointer">Logout</span> -->
             </div>
             <!-- Column 2 -->
-            <div class="flex flex-col pt-8 items-center">
-                <div class="flex gap-2 items-center">
-                    <img class="w-12 pb-2" src={{ url_for('static', path='/svg/chats.svg') }} alt="Chat icon">
+            <div class="mb-16 md:mb-0 flex flex-col pt-8 items-center bg-gray-50 shadow-xl  shadow-gray-200">
+                <!-- <div class="flex gap-2 items-center">
+                    <img class="w-11 pb-2" src={{ url_for('static', path='/svg/chats.svg' ) }} alt="Chat icon">
                     <h3 class="page-title text-3xl text-gray-900">Chats</h3>
+                </div> -->
+                <div class="flex my-3 justify-start flex-col w-3/5 md:w-4/5 lg:w-3/5">
+                    {% if chatrooms %}
+                        {% for chatroom in chatrooms %}
+                        <a href="chatroom/{{ chatroom.pk }}" class="p-3 bg--300 flex items-center gap-3 border-b-2 border-gray-200">
+                            {% if chatroom.user_1_populated.pk != user.pk %}
+                                {% if chatroom.user_1_populated.image_url %}
+                                    <img class="w-8 h-8 rounded-full object-cover" src={{ chatroom.user_1_populated.image_url }} alt="ASD">
+                                {% else %}
+                                    <img class="w-8 h-8 rounded-full object-cover" src={{ url_for('static', path='/default_profile.jpg' ) }}
+                                    alt="user profile">
+                                {% endif %}
+                                <P class="title text-xl text-gray-600">{{ chatroom.user_1_populated.username }}</P>
+                            {% else %}
+                                {% if chatroom.user_2_populated.image_url %}
+                                    <p class="hidden">{{ chatroom.user_2_populated.image_url }}</p>
+                                    <img class="w-8 h-8 rounded-full object-cover" src={{ chatroom.user_2_populated.image_url }} alt="ASD">
+                                {% else %}
+                                    <img class="w-8 h-8 rounded-full object-cover" src={{ url_for('static', path='/default_profile.jpg' ) }}
+                                alt="user profile">
+                                {% endif %}
+                                <P class="title text-xl text-gray-600">{{ chatroom.user_2_populated.username }}</P>
+                            {% endif %}
+                        </a>
+                        {% endfor %}
+                    {% else %}
+                    <p class="mt-3 text-center mx-auto">No chats to show</p>
+                    {% endif %}
+                    <!-- <a href="/users" class="flex mt-3 flex-col items-center justify-center p-4">
+                        <img class="h-9 w-9" src={{ url_for('static', path='/svg/search.svg' ) }} alt="search">
+                        <p class="page-title text-lg text-gray-900">Find people</p>
+                    </a> -->
                 </div>
             </div>
         </div>
     </main>
 </body>
+
 </html>

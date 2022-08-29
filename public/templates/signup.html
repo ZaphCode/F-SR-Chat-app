@@ -3,49 +3,46 @@
 
 <head>
     {% include 'components/head.html' %}
-    <script src={{ url_for('static', path='/javascript/signup.js') }} defer></script>
+    <script src={{ url_for('static', path='/js/signu.js') }} defer></script>
     <title>Sign up</title>
 </head>
-
 <body>
     {% include 'components/navbar-clean.html' %}
-    <div class="mb-auto pt-7">
+    <div class="mb-auto pt-12">
         <form enctype="multipart/form-data" action="/signup" method="post" 
             class="flex flex-col items-center gap-3 w-4/5 mx-auto pb-20">
-            <h2 class="page-title">Sign Up</h2>
+            <h2 class="title text-2xl mb-1">SIGN UP</h2>
             {% if service_error %}
-            <div class="flex gap-x-2 py-2 justify-center"><img class="h-7" src={{ url_for('static', path='/svg/exclamation_mark.svg') }} alt="Error">
-                <p class="text-red-900 italic text-lg">{{service_error}}</p>
+            <div class="flex gap-x-1 justify-center">
+                <ion-icon class="text-red-900 font-semibold text-2xl" name="alert-circle-outline"></ion-icon>
+                <p class="text-red-900 italic font-medium text-lg">{{service_error}}</p>
             </div>
             {% endif %}
-
             <input class="text-gray-700 max-w-xs w-3/4 p-3" type="text" name="username" placeholder="Username">
             {% if form_errors and form_errors.username %}
-            <p class="text-red-800 italic w-3/4 text-center overflow-clip">{{form_errors.username}}</p>
+            <p class="text-gray-700  italic w-3/4 text-center overflow-clip">{{form_errors.username}}</p>
             {% endif %}
             <input class="text-gray-700 max-w-xs w-3/4 p-3" type="email" name="email" placeholder="Email">
             {% if form_errors and form_errors.email %}
-            <p class="text-red-800 italic w-3/4 text-center overflow-clip">{{form_errors.email}}</p>
+            <p class="text-gray-700  italic w-3/4 text-center overflow-clip">{{form_errors.email}}</p>
             {% endif %}
             <input class="text-gray-700 max-w-xs w-3/4 p-3" type="number" name="age" placeholder="Age">
             {% if form_errors and form_errors.age %}
-            <p class="text-red-800 italic w-3/4 text-center overflow-clip">{{form_errors.age}}</p>
+            <p class="text-gray-700  italic w-3/4 text-center overflow-clip">{{form_errors.age}}</p>
             {% endif %}
             <input class="text-gray-700 max-w-xs w-3/4 p-3" type="password" placeholder="Password" name="password">
             {% if form_errors and form_errors.password %}
-            <p class="text-red-800 italic w-3/4 text-center overflow-clip">{{form_errors.password}}</p>
+            <p class="text-gray-700  italic w-3/4 text-center overflow-clip">{{form_errors.password}}</p>
             {% endif %}
-
             <input id="profile-img-input" class="text-gray-700 hidden p-3" type="file" name="z_file">
             <span id="profile-img-btn" class="flex cursor-pointer hover:bg-gray-200 transition ease-in-out duration-500 justify-center gap-2 max-w-xs w-3/4 p-3 bg-gray-50">
-                <p class="page-title text-lg font-normal text-gray-900">Add photo</p>
-                <img class="h-7" src={{ url_for('static', path='/svg/add_photo.svg') }} alt="add_photo">
+                <p class="font-normal text-gray-500">Add photo</p>
+                <ion-icon name="image-outline" class="text-xl text-gray-500"></ion-icon>
             </span>
             {% if form_errors and form_errors.z_file %}
-            <p class="text-red-800 italic w-3/4 text-center overflow-clip">{{form_errors.z_file}}</p>
+            <p class="text-gray-700 italic w-3/4 text-center overflow-clip">{{form_errors.z_file}}</p>
             {% endif %}
-
-            <input class="text-red-500 hover:text-red-300 cursor-pointer mt-2" type="submit">
+            <input class="text-lg text-neutral-600 cursor-pointer mt-3 px-5 py-1 border-2 border-gray-300" border-neutral-800" value="Submit" type="submit">
         </form>
     </div>
 </body>

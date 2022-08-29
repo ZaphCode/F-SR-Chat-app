@@ -63,6 +63,7 @@ async def testing(message: str):
 
 @router.get('/api/testing-2')
 async def testing(message: str):
-    msg = decrypt_message(message)
-    return {"message": msg}
+    users, err = user_service.get_all()
+    print(err)
+    return {"message": users}
 

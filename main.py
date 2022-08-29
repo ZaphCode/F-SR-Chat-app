@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from lib.event_handlers import shutdown_handler, startup_handler
 from lib.exceptions import ServerErrorPageException, RequiresSignInException
-from lib.exception_handlers import requeries_login_exc_handler, server_error_page_exc_handler, not_found_exc_handler
+from lib.exception_handlers import internal_err_handler, requeries_login_exc_handler, server_error_page_exc_handler, not_found_exc_handler
 from routers.views_router import router as views_router
 from routers.ws_router import router as ws_router
 from routers.chat_router import router as chat_router
@@ -47,6 +47,7 @@ app.mount('/static', StaticFiles(directory='public/static'), 'static')
 app.add_exception_handler(RequiresSignInException, requeries_login_exc_handler)
 app.add_exception_handler(ServerErrorPageException, server_error_page_exc_handler)
 app.add_exception_handler(404, not_found_exc_handler)
+app.add_exception_handler(500, internal_err_handler)
 
 #* Events handlers
 app.add_event_handler("startup", startup_handler)

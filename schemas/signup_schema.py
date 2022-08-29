@@ -9,6 +9,10 @@ class SignUpSch(BaseModel):
     password: str = Field(..., min_length=8)
     z_file: Optional[UploadFile]
 
+    @validator("username")
+    def validate_username(cls, value: str):
+        return value.strip()
+
     @validator("z_file")
     def validate_file(cls, file: UploadFile = None):
         accepted_formats = ["image/png", "image/jpg", "image/jpeg"]

@@ -16,8 +16,11 @@ async def ws_handler(
     await manager.connect(websocket)
     try:
         while True:
-            json = await websocket.receive_json()
-            message, service_error = message_service.create_message(chatroom_pk, user["pk"], json["message"])
+            json: dict = await websocket.receive_json()
+            if not json.get("message"):
+                print("Error in client side")
+                manager.disconnect(websocket)
+            message, service_error = message_service.create_message(chatroom_pk, user["pk"], json.get("message"))
             if service_error:
                 print(service_error)
                 manager.disconnect(websocket)  

@@ -1,5 +1,5 @@
 from redis_om import JsonModel, Field
-from .connections import redis_db
+from .connections import get_db
 import time
 
 class Chatroom(JsonModel):
@@ -8,7 +8,7 @@ class Chatroom(JsonModel):
     created_at: float = Field(sortable=True, default=time.time())
 
     class Meta:
-        database = redis_db
+        database = get_db()
 
 
     
