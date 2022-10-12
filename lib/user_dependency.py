@@ -9,7 +9,8 @@ def get_user_required(request: Request):
     if not user_pk:
         raise RequiresSignInException()
     user, error = user_service.get_by_pk(user_pk)
-    if error:
+    if error or not user:
+        request.session.pop("user_pk", None)
         raise ServerErrorPageException("Auth", "Something wear happend")
     return user
 
@@ -18,8 +19,9 @@ def get_user_optional(request: Request):
     if not user_pk:
         return None
     user, error = user_service.get_by_pk(user_pk)
-    if error:
-        raise ServerErrorPageException("SERVER-ERROR", "Something wear happend")
+    if error or not user:
+        request.session.pop("user_pk", None)
+        raise ServerErrorPageException("SERVER-ERROR", "Something wear happend") 
     return user
 
 def get_user_ws(websocket: WebSocket):
