@@ -1,7 +1,7 @@
 import { DisplayManager } from "./helpers/display.js";
 import { initEmojis } from "./helpers/emojis.js";
 import { getChatroom, getMessagesAndUsers } from "./helpers/requests.js";
-
+alert("FFFack")
 //* Constants
 const { chatroom_pk } = document.getElementById("server-info").dataset
 const user_fields = document.getElementsByClassName("users-to-chat-field")
@@ -27,7 +27,9 @@ if (chatroom_pk) {
                 }
             })
             initEmojis()
-            const ws = new WebSocket("ws://" + location.host + `/ws/chatroom/${chatroom_pk}`);
+            let protocol
+            window.location.protocol === 'https:' ? protocol = 'wss' : protocol = 'ws'
+            const ws = new WebSocket(`${protocol}://${location.host}/ws/chatroom/${chatroom_pk}`);
             document.getElementById("msg-form").addEventListener("submit", event => {
                 event.preventDefault()
                 const message = event.target["msg-input"].value.trim()
