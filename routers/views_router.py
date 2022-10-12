@@ -43,7 +43,6 @@ async def index_page(
     return j2.TemplateResponse('chat.html', {
         "request": request, 
         "user": user, "users": users, 
-        "app_domain": config.app_domain,
     })
 
 #* Chat / <pk>

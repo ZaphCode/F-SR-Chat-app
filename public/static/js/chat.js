@@ -3,7 +3,7 @@ import { initEmojis } from "./helpers/emojis.js";
 import { getChatroom, getMessagesAndUsers } from "./helpers/requests.js";
 
 //* Constants
-const { app_domain, chatroom_pk } = document.getElementById("server-info").dataset
+const { chatroom_pk } = document.getElementById("server-info").dataset
 const user_fields = document.getElementsByClassName("users-to-chat-field")
 const MC = document.getElementById("messages-container")
 
@@ -20,14 +20,14 @@ if (chatroom_pk) {
             let max_top = -500, skip = 0, limit = 20
             const msg_div = MC.firstElementChild
             msg_div.addEventListener("scroll", async (event) => {
-                    if (msg_div.scrollTop < max_top) {
-                        max_top *= 2, skip += 20, limit += 20
-                        const { messages, auth_user, other_user } = await getMessagesAndUsers(chatroom_pk, skip, limit)
-                        display.renderMoreMessages(messages, auth_user, other_user)   
-                    }
+                if (msg_div.scrollTop < max_top) {
+                    max_top *= 2, skip += 20, limit += 20
+                    const { messages, auth_user, other_user } = await getMessagesAndUsers(chatroom_pk, skip, limit)
+                    display.renderMoreMessages(messages, auth_user, other_user)
+                }
             })
             initEmojis()
-            const ws = new WebSocket(`ws://${app_domain}/ws/chatroom/${chatroom_pk}`);
+            const ws = new WebSocket("ws://" + location.host + `/ws/chatroom/${chatroom_pk}`);
             document.getElementById("msg-form").addEventListener("submit", event => {
                 event.preventDefault()
                 const message = event.target["msg-input"].value.trim()
