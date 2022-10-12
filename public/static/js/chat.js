@@ -1,7 +1,7 @@
 import { DisplayManager } from "./helpers/display.js";
 import { initEmojis } from "./helpers/emojis.js";
 import { getChatroom, getMessagesAndUsers } from "./helpers/requests.js";
-alert("FFFack")
+
 //* Constants
 const { chatroom_pk } = document.getElementById("server-info").dataset
 const user_fields = document.getElementsByClassName("users-to-chat-field")
