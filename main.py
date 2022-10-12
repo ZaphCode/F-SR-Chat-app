@@ -10,6 +10,7 @@ from routers.auth_router import router as auth_router
 from starlette.middleware.sessions import SessionMiddleware
 from fastapi.middleware.cors import CORSMiddleware
 import config
+import uvicorn
 
 
 #* Initialization
@@ -23,7 +24,9 @@ app = FastAPI(
 app.add_middleware(
     SessionMiddleware, 
     secret_key = config.session_secret, 
-    session_cookie = 'z-session', 
+    session_cookie = 'z-session',
+    same_site="strict",
+    https_only=True,
     max_age = 259200 # 3 days
 )
 
@@ -58,3 +61,13 @@ app.include_router(router = views_router)
 app.include_router(router = ws_router)
 app.include_router(router = auth_router)
 app.include_router(router = chat_router)
+
+#* Run
+if __name__ == "__main__":
+    uvicorn.run(
+        "main:app", 
+        host="0.0.0.0", 
+        port=config.port, 
+        reload=config.debugging, 
+        debug=config.debugging,
+    )

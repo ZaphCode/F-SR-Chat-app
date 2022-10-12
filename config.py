@@ -5,7 +5,10 @@ load_dotenv()
 
 #* Enviroments
 node_env = str(getenv("NODE_ENV", "development"))
-app_domain = str(getenv("APP_DOMAIN", "localhost:8000"))
+if node_env == "development": debugging = True 
+else: debugging = False
+port = int(getenv("PORT", "8000"))
+app_domain = str(getenv("APP_DOMAIN", f"localhost:{port}"))
 
 #* Encrypt
 session_secret = str(getenv('SESSION_SECRET', "super_secret"))

@@ -3,7 +3,7 @@
 
 <head>
     {% include 'components/head.html' %}
-    <script src={{ url_for('static', path='/js/signu.js') }} defer></script>
+    <script src={{ url_for('static', path='/js/signup.js') }} defer></script>
     <title>Sign up</title>
 </head>
 <body>
@@ -18,21 +18,21 @@
                 <p class="text-red-900 italic font-medium text-lg">{{service_error}}</p>
             </div>
             {% endif %}
-            <input class="text-gray-700 max-w-xs w-3/4 p-3" type="text" name="username" placeholder="Username">
+            <input class="text-gray-700 outline-none max-w-xs w-3/4 p-3" type="text" name="username" placeholder="Username">
             {% if form_errors and form_errors.username %}
-            <p class="text-gray-700  italic w-3/4 text-center overflow-clip">{{form_errors.username}}</p>
+            <p class="text-gray-700 -mt-2 italic w-3/4 text-center overflow-clip">{{form_errors.username}}</p>
             {% endif %}
-            <input class="text-gray-700 max-w-xs w-3/4 p-3" type="email" name="email" placeholder="Email">
+            <input class="text-gray-700 outline-none max-w-xs w-3/4 p-3" type="email" name="email" placeholder="Email">
             {% if form_errors and form_errors.email %}
-            <p class="text-gray-700  italic w-3/4 text-center overflow-clip">{{form_errors.email}}</p>
+            <p class="text-gray-700 -mt-2 italic w-3/4 text-center overflow-clip">{{form_errors.email}}</p>
             {% endif %}
-            <input class="text-gray-700 max-w-xs w-3/4 p-3" type="number" name="age" placeholder="Age">
+            <input class="text-gray-700 outline-none max-w-xs w-3/4 p-3" type="number" name="age" placeholder="Age">
             {% if form_errors and form_errors.age %}
-            <p class="text-gray-700  italic w-3/4 text-center overflow-clip">{{form_errors.age}}</p>
+            <p class="text-gray-700 -mt-2 italic w-3/4 text-center overflow-clip">{{form_errors.age}}</p>
             {% endif %}
-            <input class="text-gray-700 max-w-xs w-3/4 p-3" type="password" placeholder="Password" name="password">
+            <input class="text-gray-700 outline-none max-w-xs w-3/4 p-3" type="password" placeholder="Password" name="password">
             {% if form_errors and form_errors.password %}
-            <p class="text-gray-700  italic w-3/4 text-center overflow-clip">{{form_errors.password}}</p>
+            <p class="text-gray-700 -mt-2 italic w-3/4 text-center overflow-clip">{{form_errors.password}}</p>
             {% endif %}
             <input id="profile-img-input" class="text-gray-700 hidden p-3" type="file" name="z_file">
             <span id="profile-img-btn" class="flex cursor-pointer hover:bg-gray-200 transition ease-in-out duration-500 justify-center gap-2 max-w-xs w-3/4 p-3 bg-gray-50">
@@ -40,9 +40,10 @@
                 <ion-icon name="image-outline" class="text-xl text-gray-500"></ion-icon>
             </span>
             {% if form_errors and form_errors.z_file %}
-            <p class="text-gray-700 italic w-3/4 text-center overflow-clip">{{form_errors.z_file}}</p>
+            <p class="text-gray-700 -mt-2 italic w-3/4 text-center overflow-clip">{{form_errors.z_file}}</p>
             {% endif %}
-            <input class="text-lg text-neutral-600 cursor-pointer mt-3 px-5 py-1 border-2 border-gray-300" border-neutral-800" value="Submit" type="submit">
+            <input class="text-lg text-neutral-600 cursor-pointer mt-3 px-5 py-1 border-2 border-gray-300
+            transition ease-in-out hover:border-gray-300 hover:scale-105 duration-300" value="Submit" type="submit">
         </form>
     </div>
 </body>

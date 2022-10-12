@@ -1,16 +1,16 @@
 <nav
-    class="bg-gray-100 px-12 shadow-lg shadow-neutral-200 border-b-2 ">
+    class="bg-gray-100 px-12 shadow-lg shadow-neutral-200 ">
     <!--border-gray-500 sm:border-blue-300 md:border-green-300 lg:border-red-300 xl:border-red-900-->
     <div class="h-20 items-center justify-between container mx-auto flex">
         <div class="flex gap-2 justify-center items-center">
-            <a href="/" class="flex flex-nowrap flex-row justify-center gap-1">
-                <ion-icon class="app-logo text-3xl text-neutral-800" name="aperture"></ion-icon>
-                <h3 class="title font-bold text-xl text-neutral-800">F-RS</h3>
+            <a href="/" class="flex flex-nowrap flex-row justify-center gap-1 text-neutral-800 ">
+                <ion-icon class="app-logo text-3xl " name="aperture"></ion-icon>
+                <h3 class="title font-bold text-xl ">F-RS</h3>
             </a>
         </div>
         {% if user %}
         <div class="flex gap-x-3 justify-center items-center">
-            <ion-icon class="text-neutral-700 text-2xl" name="compass-outline"></ion-icon>
+            <ion-icon id="chat-btn" class="cursor-pointer text-neutral-700 text-2xl" name="chatbubbles-outline"></ion-icon>
             <ion-icon id="logout-btn" class="text-neutral-700 text-2xl cursor-pointer" name="log-out-outline"></ion-icon>
             <a href="/profile">
                 {% if user.image_url %}
@@ -23,8 +23,9 @@
         </div>
         {% else %}
         <div>
-            <a class="mx-2 text-lg" href="/signin">Signin</a>
-            <a class="mx-2 text-lg border-2  border-gray-200 px-4 py-1" href="/signup ">Signup</a>
+            <a class="mx-2 text-lg" href="/signin">Sign in</a>
+            <a class="mx-2 text-lg border-2 border-gray-200 px-4 py-1
+            transition ease-in-out hover:border-gray-300 duration-300" href="/signup">Sign up</a>
         </div>
         {% endif %}
     </div>

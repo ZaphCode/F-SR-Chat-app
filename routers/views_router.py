@@ -19,6 +19,10 @@ message_service = MessageService()
 async def index_page(request: Request, user: dict = Depends(get_user_optional)):
     return j2.TemplateResponse('index.html', {"request": request, "user": user})
 
+@router.get('/info', response_class=HTMLResponse)
+async def index_page(request: Request, user: dict = Depends(get_user_optional)):
+    return j2.TemplateResponse('info.html', {"request": request, "user": user})
+
 @router.get('/profile', response_class=HTMLResponse)
 async def index_page(request: Request, user: dict = Depends(get_user_required)):
     chatrooms, service_error = chatroom_service.get_chatrooms_of_user(user["pk"])
@@ -26,26 +30,43 @@ async def index_page(request: Request, user: dict = Depends(get_user_required)):
         raise ServerErrorPageException("DB_ERROR", service_error)
     return j2.TemplateResponse('profile.html', {"request": request, "user": user, "chatrooms": chatrooms})
 
-@router.get('/chatroom/{chatroom_pk}', response_class=HTMLResponse)
-async def chat_page(
-    request: Request,
-    chatroom_pk: str = Path(..., description="Chat primary key"),
-    user: dict = Depends(get_user_required)
+#* Chat Page
+@router.get('/chat', response_class=HTMLResponse)
+async def index_page(
+    request: Request, 
+    user: dict = Depends(get_user_required),
 ):
+    users, service_error = user_service.get_all(limit=10)
+    if service_error:
+        raise ServerErrorPageException("DB_ERR", service_error)
+    
+    return j2.TemplateResponse('chat.html', {
+        "request": request, 
+        "user": user, "users": users, 
+        "app_domain": config.app_domain,
+    })
+
+#* Chat / <pk>
+@router.get('/chat/{chatroom_pk}', response_class=HTMLResponse)
+async def index_page(
+    request: Request, 
+    user: dict = Depends(get_user_required),
+    chatroom_pk: str = Path(..., description="Chat primary key")):
+    users, service_error = user_service.get_all(limit=10)
+    if service_error:
+        raise ServerErrorPageException("DB_ERR", service_error)
     chatroom, service_error = chatroom_service.get_by_pk(chatroom_pk)
     if service_error or not chatroom:
         return RedirectResponse('/', status.HTTP_307_TEMPORARY_REDIRECT)
     if not (chatroom["user_pk_1"] == user["pk"] or chatroom["user_pk_2"] == user["pk"]):
         return RedirectResponse('/', status.HTTP_307_TEMPORARY_REDIRECT)
-    messages, service_error_2 = message_service.get_messages_of_chatroom(chatroom["pk"], user["pk"])
-    if service_error_2 or not chatroom:
-        return RedirectResponse('/', status.HTTP_307_TEMPORARY_REDIRECT)
-    return j2.TemplateResponse(
-        'chatroom.html', {
-            "request": request, "user": user, "app_domain": config.app_domain,
-            "chatroom_pk": chatroom["pk"], "messages": messages
-        }
-    )
+    
+    return j2.TemplateResponse('chat.html', {
+        "request": request, 
+        "user": user, "users": users, 
+        "app_domain": config.app_domain,
+        "chatroom_pk": chatroom["pk"]
+    })
 
 @router.get('/signin', response_class=HTMLResponse, tags=["Auth"])
 async def signin_page(request: Request, user: dict = Depends(get_user_optional)):
@@ -58,13 +79,6 @@ async def signup_page(request: Request, user: dict = Depends(get_user_optional))
     if user:
         return RedirectResponse('/', status.HTTP_307_TEMPORARY_REDIRECT)
     return j2.TemplateResponse('signup.html', {"request": request, "user": user})
-
-@router.get('/users', response_class=HTMLResponse)
-async def users_page(request: Request, user: dict = Depends(get_user_required)):
-    users, service_error = user_service.get_all(limit=10)
-    if service_error:
-        raise ServerErrorPageException("DB_ERR", service_error)
-    return j2.TemplateResponse('users.html', {"request": request, "user": user, "users": users})
 
 #* Testing
 @router.get('/testing/{id}', response_class=HTMLResponse)

@@ -13,7 +13,9 @@ class ChatroomService(GenericService):
 
         def chatroom_formatter(chatroom: Chatroom):
              user_1, err = user_service.get_by_pk(chatroom.user_pk_1)
+             del user_1['created_at']
              user_2, err2 = user_service.get_by_pk(chatroom.user_pk_2)
+             del user_2['created_at']
              chatroom_dict = chatroom.dict()
              chatroom_dict["user_1_populated"] = user_1
              chatroom_dict["user_2_populated"] = user_2

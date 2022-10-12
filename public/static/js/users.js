@@ -1,21 +1,32 @@
-const { auth_user_pk } = document.getElementById("server-info").dataset
-let userFields = document.getElementsByClassName("user-to-chat-field")
+const show_users_btn = document.getElementById("show-users-btn")
+const hide_users_btn = document.getElementById("hide-users-btn")
+const users_container = document.getElementById("users-to-chat-container")
 
-console.log(auth_user_pk);
+show_users_btn.addEventListener("click", event => {
+    show_users_btn.style.display = "none";
+    hide_users_btn.style.display = "block";
+    users_container.style.display = "block";
+})
 
-for (let i = 0; i < userFields.length; i++) {
-    const element = userFields[i];
-    const { user_to_chat_pk } = element.dataset
-    
-    element.addEventListener("click", async (event) => {
-        try {
-            const res = await fetch(`/chatcreate-chatroom-with/${user_to_chat_pk}`, {method: "POST"})
-            const {chatroom_pk} = await res.json()
-            window.location.href = `/chatroom/${chatroom_pk}`
-        } catch (error) {
-            alert("Something went wrong")
-            console.log(error);
-        }
-    })
+hide_users_btn.addEventListener("click", event => {
+    show_users_btn.style.display = "block";
+    hide_users_btn.style.display = "none";
+    users_container.style.display = "none";
+})
 
+function myFunction(x) {
+    if (x.matches) { // If media query matches
+        show_users_btn.style.display = "block";
+        hide_users_btn.style.display = "none";
+        users_container.style.display = "none";
+    } else {
+        show_users_btn.style.display = "none";
+        hide_users_btn.style.display = "block";
+        users_container.style.display = "block";
+    }
 }
+
+var x = window.matchMedia("(max-width: 640px)")
+myFunction(x)
+x.addListener(myFunction)
+

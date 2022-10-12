@@ -1,11 +1,10 @@
 from typing import Tuple
-from fastapi import APIRouter, BackgroundTasks, Request, Depends, status
+from fastapi import APIRouter, BackgroundTasks, Request, Depends, status, HTTPException
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from lib.exceptions import ServerErrorPageException
 from lib.user_dependency import get_user_optional
 from lib.cloudinary import upload_profile_img
-from lib.hash_fns import decrypt_message, encrypt_message
 from services.user_service import UserService
 from schemas.signup_schema import SignUpSch
 from schemas.signin_schema import SignInSch
@@ -56,14 +55,11 @@ async def logout(request: Request):
     request.session.pop("user_pk", None)
     return "Logout success"
 
-@router.get('/api/testing')
-async def testing(message: str):
-    enc_msg = encrypt_message(message)
-    return {"message": enc_msg}
+@router.get('/auth', status_code=200)
+async def auth_me(user: dict = Depends(get_user_optional)):
+    if not user:
+        raise HTTPException(401, "unauthorized")
+    return {"message": "success"}
 
-@router.get('/api/testing-2')
-async def testing(message: str):
-    users, err = user_service.get_all()
-    print(err)
-    return {"message": users}
+ 
 

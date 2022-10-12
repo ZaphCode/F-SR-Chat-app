@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% include 'components/head.html' %}
+    <script src={{ url_for('static', path='/js/chat.js') }} type="module" defer></script>
+    <script src={{ url_for('static', path='/js/auth_required.js') }} type="module" ></script>
+    <script src={{ url_for('static', path='/js/users.js') }} type="module" defer></script>
+    <title>Chat</title>
+</head>
+
+<body>
+    {% include 'components/navbar.html' %}
+    <span id="server-info" data-auth_user_pk={{ user.pk }} data-app_domain={{ app_domain }}
+        data-chatroom_pk="{{chatroom_pk}}" class="hidden"></span>
+    <main class="grid grid-cols-1 gap-y-3 gap-x-7 mt-4 sm:mt-7 px-4 sm:grid-cols-4  lg:px-10">
+        <aside class="bg-gray-100 shadow-lg max-h-96 shadow-gray-300 sm:col-span-1  pb-3 px-3 sm:pt-3">
+            <div class="bg-gray-100 flex justify-between text-2xl px-3 pt-3 sm:hidden">
+                <ion-icon name="people-circle-outline"></ion-icon>
+                <ion-icon name="caret-down-outline" class="cursor-pointer" id="show-users-btn"></ion-icon>
+                <ion-icon name="caret-up-outline" class="cursor-pointer hidden" id="hide-users-btn"></ion-icon>
+            </div>
+            <div id="users-to-chat-container" class="bg-gray-100 pb-3 pl-3 msg-div h-60 overflow-y-scroll hidden sm:block sm:h-full">
+                {% if users %}
+                {% for user_to_chat in users %}
+                {% if user.pk != user_to_chat.pk %}
+                <div data-user_to_chat_pk={{ user_to_chat.pk }}
+                    class="p-3 mx-auto w-10/12 mb-3 md:mb-1.5 flex items-center gap-3 cursor-pointer border-b-2 users-to-chat-field border-gray-200">
+                    {% if user_to_chat.image_url %}
+                    <img class="w-8 h-8 rounded-full sm:mx-auto md:mx-0 object-cover" src={{ user_to_chat.image_url }}
+                        alt="ASD">
+                    {% else %}
+                    <img class="w-8 h-8 rounded-full sm:mx-auto md:mx-0 object-cover" src={{ url_for('static',
+                        path='/default_profile.jpg' ) }} alt="user profile">
+                    {% endif %}
+                    <div class="items-start sm:hidden md:inline-block overflow-hidden  whitespace-nowrap text-ellipsis">
+                        <P class="title relative font-semibold -mb-2 text-gray-700 ">{{ user_to_chat.username }}</P>
+                        <P class="relative">{{ user_to_chat.email }}</P>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+                {% else %}
+                <p class="mx-auto text-center text-gray-500">No users to display</p>
+                {% endif %}
+            </div>
+        </aside>
+        <div id="messages-container" class="bg-gray-100 shadow-lg p-3 relative shadow-gray-300  sm:h-screen sm:col-span-3">
+            {% if not chatroom_pk %}
+            <div class="flex flex-col items-center gap-2 justify-center h-full w-full">
+                <ion-icon class=" text-6xl text-gray-600" name="chatbubble-ellipses-outline"></ion-icon>
+                <h3 class="text-gray-600 title font-semibold text-lg text-center text-clip">Welcome</h3>
+                <p class="text-gray-500 max-w-xs text-center text-clip">Open a chat!</p>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+</body>
+</html>

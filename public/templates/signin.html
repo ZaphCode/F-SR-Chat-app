@@ -18,16 +18,17 @@
                 <p class="text-red-900 italic font-medium text-lg">{{service_error}}</p>
             </div>
             {% endif %}
-            <input class="text-gray-700 max-w-xs w-3/4 p-3" type="email" name="email" placeholder="Email">
+            <input class="text-gray-700 outline-none max-w-xs w-3/4 p-3" type="email" name="email" placeholder="Email" autocomplete="off">
             {% if form_errors and form_errors.email %}
-            <p class="text-gray-700 italic w-3/4 text-center overflow-clip">{{form_errors.email}}</p>
+            <p class="text-gray-700 -mt-2 italic w-3/4 text-center overflow-clip">{{form_errors.email}}</p>
             {% endif %}
-            <input class="text-gray-700 max-w-xs w-3/4 p-3" type="password" placeholder="Password" name="password">
+            <input class="text-gray-700 outline-none max-w-xs w-3/4 p-3" type="password" placeholder="Password" name="password">
             {% if form_errors and form_errors.password %}
-            <p class="text-gray-700 italic w-3/4 text-center overflow-clip">{{form_errors.password}}</p>
+            <p class="text-gray-700 italic -mt-2 w-3/4 text-center overflow-clip">{{form_errors.password}}</p>
             {% endif %}
-            <input class="text-lg text-neutral-600 cursor-pointer mt-3 px-5 py-1 border-2 border-gray-300
-            transition ease-in-out delay-150 hover:border-gray-500 hover:scale-110 duration-300" value="Submit" type="submit">
+            <p class="text-gray-400 mt-1">You do not have an account? <a class="text-gray-500" href="/signup">Sign up</a></p>
+            <input class="text-lg text-neutral-600 cursor-pointer mt-2 px-5 py-1 border-2 border-gray-300
+            transition ease-in-out hover:border-gray-300 hover:scale-105 duration-300" value="Submit" type="submit">
         </form>
     </main>
 </body>

@@ -19,7 +19,7 @@ def get_user_optional(request: Request):
         return None
     user, error = user_service.get_by_pk(user_pk)
     if error:
-        raise ServerErrorPageException("Auth", "Something wear happend")
+        raise ServerErrorPageException("SERVER-ERROR", "Something wear happend")
     return user
 
 def get_user_ws(websocket: WebSocket):
@@ -28,5 +28,5 @@ def get_user_ws(websocket: WebSocket):
         websocket.close(code=status.WS_1008_POLICY_VIOLATION)
     user, error = user_service.get_by_pk(user_pk)
     if error:
-        raise ServerErrorPageException("Auth", "Something wear happend")
+        raise ServerErrorPageException("SERVER-ERROR", "Something wear happend")
     return user

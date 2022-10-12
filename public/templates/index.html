@@ -1,17 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     {% include 'components/head.html' %}
+    <script src={{ url_for('static', path='/js/translations.js') }} type="module" defer></script>
     <title>Home</title>
 </head>
+
 <body>
     {% include 'components/navbar.html' %}
-    <main class="container px-10 mx-auto pt-12 mb-auto">
-        <h2 class="mb-6 text-center title font-normal text-4xl mx-auto">WELCOME!</h1>
-        <p class="w-4/5 max-w-lg text-justify mx-auto">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ullam tempore eaque in quisquam quasi nemo velit, reiciendis officia nisi nihil magni nobis consequatur. Provident, iure? Tempore consequatur optio, ex placeat debitis fugit, aut nobis expedita commodi, odit eligendi maiores alias.
-        </p>
+    <main class="container  px-10 mx-auto pt-12 pb-8 mb-auto">
+        <div class="flex flex-col items-center pb-10">
+            <button
+                id="translate-btn"
+                class="bg-gray-100 text-2xl md:text-3xl h-12 sm:h-14 md:h-16 w-12 sm:w-14 md:w-16 rounded-full flex items-center justify-center shadow-lg shadow-gray-400 fixed right-3 sm:right-10 md:right-28 bottom-28">
+                <ion-icon name="language-outline"></ion-icon>
+            </button>
+            <h2 class="mb-7 text-center title font-normal text-4xl">WELCOME!</h1>
+                <p
+                id="text_1"
+                class="w-4/5 max-w-lg text-justify">
+                    Hello, my name is Omar Urquidez and I welcome you to F-RS. Although this is just a test application
+                    for learning purposes, I made it trying to use good development practices and combining relatively new
+                    technologies.
+                </p>
+                <p 
+                id="text_2"
+                class="w-4/5 max-w-lg text-justify mt-6">
+                    I decided to make this application because I wanted to gain experience developing a complete project
+                    that covers, in a simplified way, the main functionalities of a real website, such as user
+                    authentication, data CRUDs, file uploads, websockets, SSR, etc.
+                </p>
+                <div class="flex">
+                    <a class="text-lg border-2 mx-3 mt-8 border-gray-200 px-4 py-2
+        transition ease-in-out hover:border-gray-300 hover:scale-105 duration-300" href="/chat">Let's Chat</a>
+                    <a class="text-lg border-2 mx-3 mt-8 border-gray-200 px-4 py-2
+        transition ease-in-out hover:border-gray-300 hover:scale-105 duration-300" href="/info">More info</a>
+                </div>
+        </div>
     </main>
     {% include 'components/footer.html' %}
 </body>
+
 </html>

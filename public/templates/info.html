@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% include 'components/head.html' %}
+    <script src={{ url_for('static', path='/js/translations.js') }} type="module" defer></script>
+    <title>Info</title>
+</head>
+
+<body>
+    {% include 'components/navbar.html' %}
+    <main class="container px-10 mx-auto pt-12 pb-10 mb-auto">
+        <button
+            id="translate-btn"
+            class="bg-gray-100 text-2xl md:text-3xl h-12 sm:h-14 md:h-16 w-12 sm:w-14 md:w-16 rounded-full flex items-center justify-center shadow-lg shadow-gray-400 fixed right-3 sm:right-10 md:right-24 bottom-28">
+            <ion-icon name="language-outline"></ion-icon>
+        </button>
+        <h2 class="mb-6 text-center title font-normal text-4xl mx-auto">WHAT IS F-SR?</h1>
+            <p id="text_3" class="w-4/5 max-w-lg text-justify mx-auto">
+                F-SR is a real-time chat application, developed using many web technologies focused on high performance.
+                I created this app primarily to understand how websockets work and to learn how to combine different
+                frontend and backend tools, improving my full stack skills.
+            </p>
+            <h3 class="mb-2 mt-6 w-4/5 max-w-lg text-justify mx-auto text-lg title">Backend</h3>
+            <p id="text_4" class="w-4/5 max-w-lg text-justify mx-auto mb-4">
+                On the server side, this application is built with the python web framework, FastAPI, and uses Redis
+                Stack as main and cache database. Additionally, F-SR works with a cloud service called Cloudinary to
+                handle file uploads, and also implements websockets for real-time requests.
+            </p>
+            <div class="flex gap-x-5 my-4 justify-center items-baseline">
+                <img class="h-12 mr-2" src="static/tech_icons/fastapi.svg" alt="FastAPI">
+                <img class="h-12 mr-2" src="static/tech_icons/redis.svg" alt="Redis Stack">
+                <img class="w-14" src="static/tech_icons/cloudinary.png" alt="Cloudinary">
+                <img class="h-11" src="static/tech_icons/websockets.png" alt="Websockets">
+            </div>
+            <h3 class="mb-2 mt-6 w-4/5 max-w-lg text-justify mx-auto text-lg title">Frontend</h3>
+            <p id="text_5" class="w-4/5 max-w-lg text-justify mx-auto">
+                On the other hand, on the client side, I used Jinja2 template engine to create the website structure and
+                Tailwind css to add styles. I also implemented some javascript to make the websockets connections and
+                add extra functionality.
+            </p>
+            <div class="flex gap-x-2 my-3 justify-center items-baseline">
+                <img class="h-14" src="static/tech_icons/jinja2.svg" alt="Jinja2">
+                <img class="h-14" src="static/tech_icons/tailwindcss.svg" alt="Tailwind">
+                <img class="h-14" src="static/tech_icons/javascript.svg" alt="Javascript">
+            </div>
+    </main>
+</body>
+
+</html>
